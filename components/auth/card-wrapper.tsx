@@ -30,12 +30,15 @@ export const CardWrapper = ({
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
+
       <CardContent>{children}</CardContent>
+
       {showSocials && (
         <CardFooter>
           <Socials />
         </CardFooter>
       )}
+
       <CardFooter>
         <BackButton label={backButtonLabel} href={backButtonHref} />
       </CardFooter>

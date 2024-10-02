@@ -18,7 +18,7 @@ const page = () => {
             font.className
           )}
         >
-          🏋️‍♂️ Auth
+          🔐 Auth
         </h1>
         <p className="text-lg text-white">A simple Authentication Service</p>
 
