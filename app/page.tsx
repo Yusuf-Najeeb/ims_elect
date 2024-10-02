@@ -2,6 +2,7 @@ import React from "react";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { LoginButton } from "@/components/auth/login-button";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -22,9 +23,11 @@ const page = () => {
         <p className="text-lg text-white">A simple Authentication Service</p>
 
         <div>
-          <Button variant="secondary" size="lg" className="text-semibold">
-            Sign in
-          </Button>
+          <LoginButton mode="redirect">
+            <Button variant="secondary" size="lg" className="text-semibold">
+              Sign in
+            </Button>
+          </LoginButton>
         </div>
       </div>
     </main>
