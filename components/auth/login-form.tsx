@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { LoginSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 
 import {
   Form,
@@ -72,7 +74,8 @@ export const LoginForm = () => {
               )}
             />
           </div>
-
+          <FormError />
+          <FormSuccess message="the success message" />
           <Button
             disabled={form.formState.isSubmitting}
             type="submit"
