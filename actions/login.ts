@@ -5,7 +5,7 @@ import { LoginSchema } from "@/schemas";
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validateFields = LoginSchema.safeParse(values);
 
-  if (!validateFields) {
+  if (!validateFields.success) {
     return { error: "Invalid Credentials" };
   }
 
