@@ -1,13 +1,8 @@
-import { auth } from "next-auth";
+import { auth } from "@/auth";
 
 const SettingsPage = async () => {
-  const user = await auth.session();
-  return (
-    <div>
-      <h1>Settings Page</h1>
-      {JSON.stringify(user)}
-    </div>
-  );
+  const session = await auth();
+  return <div>{JSON.stringify(session)}</div>;
 };
 
 export default SettingsPage;
