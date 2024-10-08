@@ -1,31 +1,21 @@
-import NextAuth, { type DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { UserRole } from "@prisma/client";
 import { db } from "@/lib/db";
 import authConfig from "@/auth.config";
 import { getUserById } from "@/data/user";
 
-declare module "@auth/core" {
-  interface Session {
-    user: {
-      role: "ADMIN" | "USER";
-    } & DefaultSession["user"];
-  }
-}
-
-// COming Back for the this
 export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
     async session({ token, session }) {
-      console.log({
-        sessionToke: token,
-      });
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role as UserRole;
       }
+
       return session;
     },
     async jwt({ token }) {
