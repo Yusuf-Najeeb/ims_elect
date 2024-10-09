@@ -6,6 +6,14 @@ import authConfig from "@/auth.config";
 import { getUserById } from "@/data/user";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
     // async signIn({ user }) {
     //   const existingUser = await getUserById(user?.id as string);
@@ -14,6 +22,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
     //   return true;
     // },
+
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;

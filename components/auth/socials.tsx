@@ -11,6 +11,7 @@ export const Socials = () => {
       callBackUrl: DEFAULT_LOGIN_REDIRECT,
     });
   };
+
   return (
     <div className="flex items-center w-full gap-x-2">
       <Button
@@ -21,6 +22,7 @@ export const Socials = () => {
       >
         <FcGoogle className="w-5 h-5" />
       </Button>
+
       <Button
         size="lg"
         variant="outline"
