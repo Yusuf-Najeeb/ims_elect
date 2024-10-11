@@ -19,13 +19,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user?.id as string);
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
 
-    //   if (!existingUser || !existingUser.emailVerified) return false;
+      const existingUser = await getUserById(user?.id as string);
 
-    //   return true;
-    // },
+      if (!existingUser || !existingUser.emailVerified) return false;
+
+      //TODO:  Add 2FA check
+
+      return true;
+    },
 
     async session({ token, session }) {
       if (token.sub && session.user) {
