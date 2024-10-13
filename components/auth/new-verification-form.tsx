@@ -1,11 +1,40 @@
 "use client";
-import { useState, CSSProperties } from "react";
+
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { CardWrapper } from "./card-wrapper";
+import { newVerification } from "@/actions/new-verification";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 
 const NewVerificationForm = () => {
-  let [loading, setLoading] = useState(true);
-  let [color, setColor] = useState("skyblue");
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+
+  const color = "skyblue";
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  const onSubmit = useCallback(() => {
+    if (!token) {
+      return setError("Token missing!");
+    }
+
+    newVerification(token)
+      .then((data) => {
+        setSuccess(data.success);
+        setError(data.error);
+      })
+      .catch(() => {
+        setError("Something went wrong");
+      });
+  }, [token]);
+
+  useEffect(() => {
+    onSubmit();
+  }, [onSubmit]);
+
   return (
     <CardWrapper
       headerLabel="Confirm your email account"
@@ -13,7 +42,10 @@ const NewVerificationForm = () => {
       backButtonLabel="Back to login"
     >
       <div className="flex items-center justify-center">
-        <ClipLoader color={color} loading={loading} />
+        {!error && !success && <ClipLoader color={color} />}
+
+        <FormError message={error} />
+        <FormSuccess message={success} />
       </div>
     </CardWrapper>
   );
