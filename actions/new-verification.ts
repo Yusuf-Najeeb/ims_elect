@@ -18,12 +18,21 @@ export const newVerification = async (token: string) => {
   }
 
   const existingUser = await getUserByEmail(existingToken.email);
+
   if (!existingUser) {
     return { error: "Email does not exist" };
   }
 
+  //   await db.user.update({
+  //     where: { id: existingToken.id },
+  //     data: {
+  //       emailVerified: new Date(),
+  //       email: existingToken.email,
+  //     },
+  //   });
+
   await db.user.update({
-    where: { id: existingToken.id },
+    where: { email: existingToken.email },
     data: {
       emailVerified: new Date(),
       email: existingToken.email,
