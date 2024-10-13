@@ -17,6 +17,7 @@ const NewVerificationForm = () => {
   const token = searchParams.get("token");
 
   const onSubmit = useCallback(() => {
+    if (success || error) return;
     if (!token) {
       return setError("Token missing!");
     }
@@ -29,7 +30,7 @@ const NewVerificationForm = () => {
       .catch(() => {
         setError("Something went wrong");
       });
-  }, [token]);
+  }, [token, success, error]);
 
   useEffect(() => {
     onSubmit();
@@ -44,8 +45,8 @@ const NewVerificationForm = () => {
       <div className="flex items-center justify-center">
         {!error && !success && <ClipLoader color={color} />}
 
-        <FormError message={error} />
         <FormSuccess message={success} />
+        {!success && <FormError message={error} />}
       </div>
     </CardWrapper>
   );
