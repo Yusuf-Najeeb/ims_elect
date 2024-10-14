@@ -24,7 +24,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       const existingUser = await getUserById(user?.id as string);
 
-      if (!existingUser || !existingUser.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
 
       //TODO:  Add 2FA check
 

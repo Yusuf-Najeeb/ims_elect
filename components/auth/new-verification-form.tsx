@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { CardWrapper } from "./card-wrapper";
@@ -9,6 +9,7 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 
 const NewVerificationForm = () => {
+  const isVerified = useRef(true);
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
 
@@ -17,7 +18,6 @@ const NewVerificationForm = () => {
   const token = searchParams.get("token");
 
   const onSubmit = useCallback(() => {
-    // if (success || error) return;
     if (!token) {
       return setError("Token missing!");
     }
@@ -34,7 +34,10 @@ const NewVerificationForm = () => {
   }, [token]);
 
   useEffect(() => {
-    onSubmit();
+    if (isVerified.current) {
+      isVerified.current = false;
+      onSubmit();
+    }
   }, [onSubmit]);
 
   return (
