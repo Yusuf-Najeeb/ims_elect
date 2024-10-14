@@ -23,7 +23,7 @@ import {
 import { CardWrapper } from "./card-wrapper";
 import { login } from "../../actions/login";
 
-export const LoginForm = () => {
+export const ResetForm = () => {
   const searchParams = useSearchParams();
 
   const urlError =
@@ -59,9 +59,9 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/auth/register"
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to login"
+      backButtonHref="/auth/login"
       showSocials
     >
       <Form {...form}>
