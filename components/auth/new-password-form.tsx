@@ -46,6 +46,8 @@ export const NewPasswordForm = () => {
         if (data) {
           setError(data.error);
           setSuccess(data.success);
+        } else {
+          setError("Something went wrong");
         }
       });
     });
