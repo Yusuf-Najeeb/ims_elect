@@ -24,6 +24,7 @@ export const resetPassword = async (
   const { password } = validatedField.data;
 
   const existingToken = await getPasswordResetTokenByToken(token);
+
   if (!existingToken) {
     return { error: "Invalid token" };
   }
@@ -35,9 +36,11 @@ export const resetPassword = async (
   }
 
   const existingUser = await getUserByEmail(existingToken.email);
+
   if (!existingUser) {
     return { error: "Email does not exist" };
   }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await db.user.update({
