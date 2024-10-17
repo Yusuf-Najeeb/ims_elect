@@ -31,7 +31,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
         );
-        if (!twoFactorConfirmation) return false;
+
+        if (!twoFactorConfirmation) {
+          return false;
+        }
 
         await db.twoFactorConfirmation.delete({
           where: { id: twoFactorConfirmation.id },
