@@ -42,23 +42,17 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     return { success: "Email verification sent" };
   }
 
-  if (existingUser.emailVerified && existingUser.email) {
+  if (existingUser.isTwoFactorEnabled && existingUser.email) {
     if (code) {
       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
-      if (!twoFactorToken) {
-        return { error: "Invalid code" };
-      }
+      if (!twoFactorToken) return { error: "Invalid Code" };
 
-      if (twoFactorToken.token !== code) {
-        return { error: "Invalid code" };
-      }
+      if (twoFactorToken.token !== code) return { error: "Invalid Code" };
 
       const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
-      if (hasExpired) {
-        return { error: "Code has expired" };
-      }
+      if (hasExpired) return { error: "Code expired" };
 
       await db.twoFactorToken.delete({
         where: { id: twoFactorToken.id },
@@ -84,8 +78,11 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
       await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
     }
+
     return { twoFactor: true };
   }
+
+  console.log("Are we here?" + existingUser);
 
   try {
     await signIn("credentials", {
