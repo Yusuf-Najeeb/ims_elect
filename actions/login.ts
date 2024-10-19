@@ -77,12 +77,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       const twoFactorToken = await generateTwoFactorToken(existingUser.email);
 
       await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
+      return { twoFactor: true };
     }
-
-    return { twoFactor: true };
   }
-
-  console.log("Are we here?" + existingUser);
 
   try {
     await signIn("credentials", {
@@ -90,7 +87,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-
     return { success: "Login Successful" };
   } catch (error) {
     if (error instanceof AuthError) {
