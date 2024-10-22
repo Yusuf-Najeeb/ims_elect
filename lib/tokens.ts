@@ -33,7 +33,7 @@ export const generatePasswordResetToken = async (email: string) => {
   const token = uuidv4();
 
   const expires = new Date();
-  expires.setHours(expires.getHours() + 1);
+  expires.setHours(expires.getMinutes() + 5);
 
   const existingToken = await getPasswordResetTokenByEmail(email);
 
