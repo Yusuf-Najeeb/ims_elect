@@ -16,20 +16,23 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  FormDescription,
+  // FormDescription,
 } from "@/components/ui/form";
-import { input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
+import { useCurrentUser } from "@/hooks/use-current-user";
+
 const SettingsPage = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
   const [isPending, startTransition] = useTransition();
   const { update } = useSession();
+  const user = useCurrentUser();
 
   const form = useForm<z.infer<typeof settingsSchema>>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      name: "",
+      name: user?.name || undefined,
     },
   });
   const onSubmit = (values: z.infer<typeof settingsSchema>) => {
@@ -42,6 +45,7 @@ const SettingsPage = () => {
           }
 
           if (data?.success) {
+            update();
             setSuccess(data.success);
             setError("");
           }
@@ -57,7 +61,30 @@ const SettingsPage = () => {
 
       <CardContent>
         <Form {...form}>
-          <form className="flex flex-col gap-4"></form>
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="John Doe"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage></FormMessage>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Button type="submit" disabled={isPending}>
+              Save
+            </Button>
+          </form>
         </Form>
       </CardContent>
     </Card>
